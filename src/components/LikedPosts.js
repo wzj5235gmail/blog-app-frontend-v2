@@ -1,6 +1,5 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import React from 'react';
-import PostCard from './PostCard';
 import PostCardSimple from './PostCardSimple';
 
 const LikedPosts = ({ currentUser }) => {

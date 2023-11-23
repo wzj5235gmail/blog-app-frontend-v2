@@ -18,6 +18,7 @@ import Footer from './components/Footer';
 import Topic from './pages/Topic';
 import AuthorProfile from './pages/AuthorProfile';
 import UserProfile from './pages/UserProfile';
+import Oauth from './pages/Oauth';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route exact path="/edit" Component={PostEdit} />
           <Route exact path="/edit/:postId" Component={PostEdit} />
           <Route exact path="/profile" Component={UserProfile} />
+          <Route exact path="/oauth" Component={Oauth} />
         </Routes>
       </Router>
       <Footer />

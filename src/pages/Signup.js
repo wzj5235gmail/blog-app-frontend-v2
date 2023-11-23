@@ -1,7 +1,9 @@
-import { Alert, AlertIcon, Button, Flex, FormControl, FormLabel, Heading, Input, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Avatar, Button, Flex, FormControl, FormLabel, HStack, Heading, Input, Link, Spinner, Text, VStack } from "@chakra-ui/react";
 import MyBreadCrumb from "../components/MyBreadCrumb";
 import { registerUser } from "../apis/Apis";
 import { useState } from "react";
+import google from "../static/google.png"
+
 
 export default function Signup() {
 
@@ -150,6 +152,12 @@ export default function Signup() {
             <Button onClick={handleClear}>Clear</Button>
           </Flex>
         </FormControl>
+        <Link textDecor='none' href='http://127.0.0.1:5000/auth/google'>
+          <HStack>
+            <Avatar src={google} boxSize='1rem' />
+            <Text fontWeight={600}>Sign in with Google</Text>
+          </HStack>
+        </Link>
       </VStack>
     </>
   )

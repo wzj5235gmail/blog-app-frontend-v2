@@ -14,10 +14,11 @@ export default function Blog() {
   const [selectedTag, setSelectedTag] = useState({})
   const [availableCategories, setAvailableCategories] = useState([])
   const [availableTags, setAvailableTags] = useState([])
-  const { tagId, authorId, search } = useParams()
+  const { search } = useParams()
   const [desc, setDesc] = useState(true)
   const [sort, setSort] = useState('date')
   const [pageCount, setPageCount] = useState(0)
+  const [searchResult, setSearchResult] = useState(search)
 
   useEffect(() => {
     const getCategories = async () => {
@@ -33,29 +34,15 @@ export default function Blog() {
     getCategories()
     getTags()
 
-    if (tagId) {
-      const getTagPosts = async () => {
-        const data = await getFilteredPosts('tags=' + tagId)
-        setArticles(data.data.data)
-        setPageCount(data.data.pageCount)
-      }
-      getTagPosts()
-
-    } else if (authorId) {
-      const getAuthorPosts = async () => {
-        const data = await getFilteredPosts('author=' + authorId)
-        setArticles(data.data.data)
-        setPageCount(data.data.pageCount)
-      }
-      getAuthorPosts()
-
-    } else if (search) {
+    if (search) {
       const getSearchPosts = async () => {
-        const data = await getFilteredPosts('search=' + search)
+        const data = await getFilteredPosts('status=published&search=' + search)
+        setSearchResult(search)
         setArticles(data.data.data)
         setPageCount(data.data.pageCount)
       }
       getSearchPosts()
+
     } else {
       const getPosts = async () => {
         const data = await getAllPosts()
@@ -76,7 +63,7 @@ export default function Blog() {
 
   const handlePageClick = e => {
     const getPosts = async () => {
-      const data = await getFilteredPosts(`page=${e.selected + 1}`)
+      const data = await getFilteredPosts(`status=published&page=${e.selected + 1}`)
       setArticles(data.data.data)
     }
     getPosts()
@@ -126,27 +113,26 @@ export default function Blog() {
       <Flex maxW={['3xl', '4xl', '5xl', '6xl']} px='2rem' mx='auto' wrap='wrap' gap='2rem'>
         <Flex className="filterOptions" direction='column' gap='1.5rem' mx='auto'>
 
-
-          <Heading size='lg'>Category</Heading>
+          <Heading size='lg' fontWeight={200}>Category</Heading>
           <Select
             className="select"
             options={availableCategories}
             onChange={handleCategoryChange}
-            placeholder='Search or select...'
+            placeholder='Category'
             isClearable
           />
-          <Heading size='lg'>Topic</Heading>
+          <Heading size='lg' fontWeight={200}>Topic</Heading>
           <Select
             className="select"
             options={availableTags}
             onChange={handleTagChange}
-            placeholder='Search or select...'
+            placeholder='Topic'
             isClearable
           />
 
 
           <HStack justify='space-between'>
-            <Heading size='lg'>Sort</Heading>
+            <Heading size='lg' fontWeight={200}>Sort</Heading>
             <Checkbox defaultChecked isChecked={desc} onChange={e => setDesc(e.target.checked)}>Descending</Checkbox>
           </HStack>
           <RadioGroup defaultValue="date" onChange={value => setSort(value)}>
@@ -155,11 +141,15 @@ export default function Blog() {
               <Radio value='title'>Title</Radio>
             </Stack>
           </RadioGroup>
-          <Button onClick={handleFilter}>Filter</Button>
+          <Button colorScheme="yellow" onClick={handleFilter}>Filter</Button>
           <Divider my='2rem' />
         </Flex>
 
         <Flex className="articles" direction='column' mx='auto'>
+          {searchResult && <Flex gap='.5rem' mb='1.5rem'>
+            <Heading fontWeight={200}>Results for</Heading>
+            <Heading>{searchResult}</Heading>
+          </Flex>}
           {articles && articles.length > 0 ?
             (articles.map(i => { return <PostCard key={i._id} {...i} /> })) :
             <Heading>No results.</Heading>

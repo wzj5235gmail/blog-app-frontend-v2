@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, HStack, Heading, Skeleton, SkeletonCircle, SkeletonText, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Divider, Flex, HStack, Heading, Skeleton, SkeletonCircle, SkeletonText, Stack, Text, VStack } from '@chakra-ui/react';
 import PostCard from '../components/PostCard';
 import FeaturedCard from '../components/FeaturedCard';
 import AuthorToFollowCard from '../components/AuthorToFollowCard';
@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 import { getAllPosts, getFeaturedPosts, getFeaturedUsers, getFilteredPosts, getTenTags } from '../apis/Apis';
 import TopicTag from '../components/TopicTag';
 import isAuthenticated from '../isAuthenticated';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import PostCardSkeleton from '../components/PostCardSkeleton';
+import FeaturedPostCardSkeleton from '../components/FeaturedPostCardSkeleton';
 
 const Home = () => {
 
@@ -13,13 +16,13 @@ const Home = () => {
   const [featured, setFeatured] = useState([])
   const [tags, setTags] = useState([])
   const [authors, setAuthors] = useState([])
-
-  let nextPage = 2
+  const [page, setPage] = useState(2)
+  const [hasMore, setHasMore] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
     const retrieveData = async () => {
-      const postData = await getAllPosts()
+      const postData = await getFilteredPosts('status=published')
       setPosts(postData.data && postData.data.data)
       const featuredData = await getFeaturedPosts()
       setFeatured(featuredData.data && featuredData.data.data)
@@ -29,22 +32,18 @@ const Home = () => {
       setAuthors(authorData.data && authorData.data.data)
     }
     retrieveData()
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    setIsMobile(window.innerWidth <= 767)
   }, [])
 
-  const handleScroll = async () => {
-    if (
-      window.scrollY + window.innerHeight - document.documentElement.scrollHeight >= -1
-    ) {
-      const postData = await getFilteredPosts(`page=${nextPage}`)
-      if (postData.data.data) {
-        setPosts(prev => [...prev, ...postData.data.data])
-        nextPage++
-      }
+
+  const fetchData = async () => {
+    const res = await getFilteredPosts(`status=published&page=${page}`)
+    if (res.success) {
+      setPosts(prev => [...prev, ...res.data.data])
+      setPage(prev => prev + 1)
+      setHasMore(res.data.has_more)
     }
-  };
+  }
 
   return (
     <>
@@ -57,23 +56,42 @@ const Home = () => {
             <Heading className='title' size='xl'>Lastest Posts</Heading>
             {isAuthenticated() && <Button colorScheme='orange' onClick={() => window.location.pathname = '/edit'}>Create your post</Button>}
           </Flex>
-          {posts && posts.length > 0 ? posts.map(i => <PostCard key={i.id} {...i} />) : (
-            <Box bg='white'>
-              <Box bg='white' w='3xl' my='2rem'>
-                <SkeletonCircle size='10' />
-                <SkeletonText mt='4' noOfLines={3} spacing='4' skeletonHeight='3' />
-              </Box>
-              <Box bg='white' w='3xl' my='2rem'>
-                <SkeletonCircle size='10' />
-                <SkeletonText mt='4' noOfLines={3} spacing='4' skeletonHeight='3' />
-              </Box>
-              <Box bg='white' w='3xl' my='2rem'>
-                <SkeletonCircle size='10' />
-                <SkeletonText mt='4' noOfLines={3} spacing='4' skeletonHeight='3' />
-              </Box>
-            </Box>
-
-          )}
+          {posts && posts.length > 0 ?
+            isMobile ? (
+              <>
+                {posts.map(i => <PostCard key={i.id} {...i} />)}
+                {hasMore ? (
+                  <Center
+                    style={{ cursor: 'pointer' }}
+                    onClick={fetchData}
+                  >
+                    Load more...
+                  </Center>
+                ) : (
+                  <Center color='grey' my='1rem'>End of posts</Center>
+                )}
+              </>
+            ) : (
+              <InfiniteScroll
+                dataLength={posts.length}
+                next={fetchData}
+                hasMore={hasMore}
+                loader={<Center>Loading...</Center>}
+                endMessage={
+                  <Center color='grey' my='1rem'>End of posts</Center>
+                }
+              >
+                {posts.map(i => <PostCard key={i.id} {...i} />)}
+              </InfiniteScroll>
+            ) : (
+              <>
+                <Box w='3xl' my='2rem'>
+                  <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
+                  <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
+                  <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
+                </Box>
+              </>
+            )}
         </Flex>
 
         <Flex className='home-right' direction='column' maxW={['sm']}>
@@ -83,19 +101,12 @@ const Home = () => {
           <Flex className='featured-posts' direction='column' gap='1.5rem' my='2rem' mx='auto' px='1rem' w='sm'>
             <Heading className='title' size='md'>Featured Posts</Heading>
             {featured && featured.length > 0 ? featured.map(i => <FeaturedCard key={i._id} {...i} />) : (
-              <Box bg='white'>
-                <Box bg='white' my='1rem'>
-                  <SkeletonCircle size='10' />
-                  <SkeletonText mt='4' noOfLines={1} spacing='4' skeletonHeight='2' />
-                </Box>
-                <Box bg='white' my='1rem'>
-                  <SkeletonCircle size='10' />
-                  <SkeletonText mt='4' noOfLines={1} spacing='4' skeletonHeight='2' />
-                </Box>
+              <Box>
+                <FeaturedPostCardSkeleton />
+                <FeaturedPostCardSkeleton />
+                <FeaturedPostCardSkeleton />
               </Box>
             )}
-
-
           </Flex>
 
           <Divider />
@@ -106,11 +117,9 @@ const Home = () => {
             <Heading className='title' size='md' mb='1rem'>Recommended topics</Heading>
             <HStack wrap='wrap' gap='1rem'>
               {tags && tags.length > 0 ? tags.map(tag => <TopicTag key={tag._id} {...tag} />) : (
-                <Stack>
-                  <Skeleton height='20px' />
-                  <Skeleton height='20px' />
-                  <Skeleton height='20px' />
-                </Stack>
+                <Box w='3xl'>
+                  <SkeletonText noOfLines={3} spacing='4' skeletonHeight='2' />
+                </Box>
               )}
             </HStack>
 
@@ -123,9 +132,10 @@ const Home = () => {
           <Flex className='who-to-follow' direction='column' gap='1rem' my='2rem' mx='auto' px='1rem' w='sm'>
             <Heading className='title' size='md' mb='1rem'>Who to follow</Heading>
             {authors && authors.length > 0 ? authors.map(i => <AuthorToFollowCard key={i._id} {...i} />) : (
-              <Box bg='white'>
-                <SkeletonCircle size='10' />
-                <SkeletonText mt='4' noOfLines={1} spacing='4' skeletonHeight='2' />
+              <Box>
+                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
+                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
+                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
               </Box>
             )}
 

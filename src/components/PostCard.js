@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Heading, Text, Image, Stack, Divider, Flex, Center, HStack } from '@chakra-ui/react'
+import { Link, Heading, Text, Image, Stack, Divider, Flex, Center, HStack, Box, VStack } from '@chakra-ui/react'
 import DOMPurify from 'dompurify'
 import TopicTag from './TopicTag'
 
@@ -42,19 +42,27 @@ export default function PostCard({ _id, author, publishDate, coverImage, title, 
               {title}
             </Link>
           </Heading>
-          <Text
-            noOfLines={3}
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(extract)
-            }}
-          />
-          <Stack direction="row" align="center">
-            {tags && tags.map(tag => <TopicTag key={tag._id} {...tag} />)}
-          </Stack>
+          <Box
+            className='post-card-extract'
+          >
+            <Text
+              noOfLines={3}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(extract)
+              }}
+            />
+          </Box>
+          <Box
+            className='post-card-tags'
+          >
+            <HStack>
+              {tags && tags.map(tag => <TopicTag key={tag._id} {...tag} />)}
+            </HStack>
+          </Box>
         </Flex>
         <Center mx='1rem'>
           <Link href={`/posts/${_id}`}>
-            <Image className='post-image' src={coverImage} maxH={200} maxW={200} fit='cover' />
+            <Image className='post-card-image' src={coverImage} maxH={200} maxW={200} fit='cover' />
           </Link>
         </Center>
       </Flex>

@@ -20,7 +20,7 @@
   margin: 4rem auto;
   padding: 2rem;
 }
-  
+
 .post-content code {
   background-color: #ededed;
   padding: 0 .5rem;
@@ -28,7 +28,9 @@
 }
 
 @media (max-width: 850px) {
-  .post-image {
+  .post-card-image,
+  .post-card-extract,
+  .post-card-tags {
     display: none;
   }
 }

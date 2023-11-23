@@ -1,11 +1,10 @@
-import { Box, Flex, Text, Link, IconButton, Icon } from '@chakra-ui/react';
-import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { Box, Flex, Text, Link } from '@chakra-ui/react';
 
 const Footer = () => {
   return (
     <Box bg="#FAD773" p={4} className='footer'>
       <Flex justify="space-between" align="center" wrap='wrap'>
-        <Text color="black">Your Programmer Blog &copy; 2023</Text>
+        <Text color="black">Program Talks &copy; 2023</Text>
         <Flex gap={4}>
           <Link href="/about" color="black">
             About
