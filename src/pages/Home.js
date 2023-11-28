@@ -1,14 +1,12 @@
-import { Box, Button, Center, Divider, Flex, HStack, Heading, Skeleton, SkeletonCircle, SkeletonText, Stack, Text, VStack } from '@chakra-ui/react';
-import PostCard from '../components/PostCard';
-import FeaturedCard from '../components/FeaturedCard';
-import AuthorToFollowCard from '../components/AuthorToFollowCard';
+import { Box, Center, Divider, Flex, HStack, Heading, SkeletonText, Spinner } from '@chakra-ui/react';
+import AuthorToFollowCard from '../components/Home/AuthorToFollowCard';
 import { useEffect, useState } from 'react';
-import { getAllPosts, getFeaturedPosts, getFeaturedUsers, getFilteredPosts, getTenTags } from '../apis/Apis';
-import TopicTag from '../components/TopicTag';
-import isAuthenticated from '../isAuthenticated';
+import { getFeaturedPosts, getFeaturedUsers, getFilteredPosts, getTenTags } from '../apis/Apis';
+import TopicTag from '../components/PostDetail/TopicTag';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import PostCardSkeleton from '../components/PostCardSkeleton';
-import FeaturedPostCardSkeleton from '../components/FeaturedPostCardSkeleton';
+import FeaturedPostCardSkeleton from '../components/Home/FeaturedPostCardSkeleton';
+import PostCard from '../components/Home/PostCard';
+import FeaturedCard from '../components/Home/FeaturedCard';
 
 const Home = () => {
 
@@ -19,6 +17,7 @@ const Home = () => {
   const [page, setPage] = useState(2)
   const [hasMore, setHasMore] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const retrieveData = async () => {
@@ -32,40 +31,45 @@ const Home = () => {
       setAuthors(authorData.data && authorData.data.data)
     }
     retrieveData()
-    setIsMobile(window.innerWidth <= 767)
+    setIsMobile(window.innerWidth < 768)
   }, [])
 
 
   const fetchData = async () => {
+    setLoading(true)
     const res = await getFilteredPosts(`status=published&page=${page}`)
     if (res.success) {
+      setLoading(false)
       setPosts(prev => [...prev, ...res.data.data])
       setPage(prev => prev + 1)
       setHasMore(res.data.has_more)
+    } else {
+      setLoading(false)
+      console.log('Failed to fetch data: ' + res.message)
     }
   }
 
   return (
     <>
-      <Flex justifyContent='space-evenly' maxW={['3xl', '4xl', '5xl', '8xl']} px='2rem' mx='auto' wrap='wrap' gap='4rem'>
+      <Flex justifyContent={['center', null, null, 'space-evenly']} maxW={['3xl', '4xl', '5xl', '8xl']} px='2rem' mx='auto' wrap='wrap' gap='4rem'>
 
         {/* Latest Posts */}
 
         <Flex className='home-left latest-posts' direction='column' gap='1rem' mt='2rem' mb='5rem'>
-          <Flex justify='space-between' align='center'>
-            <Heading className='title' size='xl'>Lastest Posts</Heading>
-            {isAuthenticated() && <Button colorScheme='orange' onClick={() => window.location.pathname = '/edit'}>Create your post</Button>}
-          </Flex>
+          <Heading className='title' size='xl'>Lastest Posts</Heading>
           {posts && posts.length > 0 ?
             isMobile ? (
               <>
                 {posts.map(i => <PostCard key={i.id} {...i} />)}
                 {hasMore ? (
                   <Center
-                    style={{ cursor: 'pointer' }}
+                    className='pointer'
                     onClick={fetchData}
                   >
-                    Load more...
+                    {loading ?
+                      <Spinner /> :
+                      <span>Load more...</span>
+                    }
                   </Center>
                 ) : (
                   <Center color='grey' my='1rem'>End of posts</Center>
@@ -76,7 +80,7 @@ const Home = () => {
                 dataLength={posts.length}
                 next={fetchData}
                 hasMore={hasMore}
-                loader={<Center>Loading...</Center>}
+                loader={<Center my='1rem'><Spinner /></Center>}
                 endMessage={
                   <Center color='grey' my='1rem'>End of posts</Center>
                 }
@@ -85,7 +89,7 @@ const Home = () => {
               </InfiniteScroll>
             ) : (
               <>
-                <Box w='3xl' my='2rem'>
+                <Box w={['90vw', null, null, '3xl']} my='2rem'>
                   <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
                   <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
                   <SkeletonText mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
@@ -101,7 +105,7 @@ const Home = () => {
           <Flex className='featured-posts' direction='column' gap='1.5rem' my='2rem' mx='auto' px='1rem' w='sm'>
             <Heading className='title' size='md'>Featured Posts</Heading>
             {featured && featured.length > 0 ? featured.map(i => <FeaturedCard key={i._id} {...i} />) : (
-              <Box>
+              <Box w='100%'>
                 <FeaturedPostCardSkeleton />
                 <FeaturedPostCardSkeleton />
                 <FeaturedPostCardSkeleton />
@@ -117,7 +121,7 @@ const Home = () => {
             <Heading className='title' size='md' mb='1rem'>Recommended topics</Heading>
             <HStack wrap='wrap' gap='1rem'>
               {tags && tags.length > 0 ? tags.map(tag => <TopicTag key={tag._id} {...tag} />) : (
-                <Box w='3xl'>
+                <Box w='100%'>
                   <SkeletonText noOfLines={3} spacing='4' skeletonHeight='2' />
                 </Box>
               )}
@@ -131,13 +135,17 @@ const Home = () => {
 
           <Flex className='who-to-follow' direction='column' gap='1rem' my='2rem' mx='auto' px='1rem' w='sm'>
             <Heading className='title' size='md' mb='1rem'>Who to follow</Heading>
-            {authors && authors.length > 0 ? authors.map(i => <AuthorToFollowCard key={i._id} {...i} />) : (
-              <Box>
-                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
-                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
-                <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
-              </Box>
-            )}
+            {authors && authors.length > 0
+              ?
+              authors.map(i => <AuthorToFollowCard key={i._id} {...i} />)
+              :
+              (
+                <Box w='100%'>
+                  <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
+                  <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
+                  <SkeletonText mt='4' noOfLines={2} spacing='4' skeletonHeight='2' />
+                </Box>
+              )}
 
           </Flex>
 

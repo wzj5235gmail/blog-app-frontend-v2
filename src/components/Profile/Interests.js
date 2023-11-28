@@ -1,6 +1,6 @@
-import { Box, Flex, HStack, Link, Tag, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
-import TopicTag from './TopicTag';
+import TopicTag from '../PostDetail/TopicTag';
 
 const Interests = ({ currentUser }) => {
   const userInterests = currentUser.interests || [];

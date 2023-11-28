@@ -1,5 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
-import PostCard from './PostCard';
+import { Box, Text } from '@chakra-ui/react';
 import PostCardSimple from './PostCardSimple';
 
 export default function UserPosts({ currentUser }) {

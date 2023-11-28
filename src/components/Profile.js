@@ -1,7 +1,7 @@
 import { Avatar, Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getFilteredPosts, getUserById } from "../apis/Apis";
-import PostCard from "./PostCard";
+import PostCard from "./Home/PostCard";
 import useFollow from "../hooks/useFollow";
 
 export default function Profile({ userId }) {

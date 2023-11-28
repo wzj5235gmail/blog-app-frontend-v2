@@ -20,6 +20,8 @@ export default function PostEdit() {
   const [content, setContent] = useState('')
   const { postId } = useParams()
   const [isUpdate, setIsUpdate] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [draftLoading, setDraftLoading] = useState(false)
 
   useEffect(() => {
     if (postId) {
@@ -41,6 +43,7 @@ export default function PostEdit() {
       }
       getPost()
     }
+
     const getCategories = async () => {
       const res = await getAllCategories()
       setCategories(res.data.data.map(item => {
@@ -50,6 +53,7 @@ export default function PostEdit() {
         }
       }))
     }
+
     const getTags = async () => {
       const res = await getAllTags()
       setTags(res.data.data.map(item => {
@@ -59,7 +63,9 @@ export default function PostEdit() {
         }
       }))
     }
+
     getCategories()
+
     getTags()
   }, [])
 
@@ -85,6 +91,7 @@ export default function PostEdit() {
   ]
 
   const handleSubmit = async (isDraft) => {
+    isDraft? setDraftLoading(true) : setSubmitLoading(true)
     const post = {
       title,
       content: content,
@@ -187,7 +194,7 @@ export default function PostEdit() {
           <HStack gap='1rem'>
             <Input
               size='sm'
-              placeholder="New category..."
+              placeholder="New category"
               onChange={e => setNewCategory(e.target.value)}
               value={newCategory}
             />
@@ -209,7 +216,7 @@ export default function PostEdit() {
           <HStack gap='1rem'>
             <Input
               size='sm'
-              placeholder="New tag..."
+              placeholder="New tag"
               onChange={e => setNewTag(e.target.value)}
               value={newTag}
             />
@@ -221,11 +228,17 @@ export default function PostEdit() {
           </HStack>
           <Divider />
           <Button
-            colorScheme="orange"
+            isDisabled={!title ||!content ||!selectedCategory.value ||!selectedTags.length}
             onClick={() => handleSubmit(false)}
+            colorScheme="yellow"
+            isLoading={submitLoading}
           >{isUpdate ? 'Update' : 'Publish'}</Button>
           {!isUpdate &&
-            <Button onClick={() => handleSubmit(true)}>Save as draft</Button>
+            <Button
+              onClick={() => handleSubmit(true)}
+              isDisabled={!title || !content || !selectedCategory.value || !selectedTags.length}
+              isLoading={draftLoading}
+            >Save as draft</Button>
           }
           <Button onClick={() => window.location.pathname = '/'}>Discard</Button>
         </Flex>

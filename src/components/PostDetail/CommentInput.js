@@ -1,6 +1,6 @@
 import { Card, CardBody, Text, Textarea, Flex, Avatar, Button, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { createComment } from '../apis/Apis'
+import { createComment } from '../../apis/Apis'
 
 
 export default function CommentInput({ postId, parentCommentId, setIsShow, setComments, currentUser, notShowCancel }) {

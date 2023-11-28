@@ -2,7 +2,7 @@ import { Avatar, Flex, HStack, Heading, Input, Text, VStack } from "@chakra-ui/r
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { IoCheckmarkOutline, IoClose } from "react-icons/io5";
-import { updateUserProfile } from "../apis/Apis";
+import { updateUserProfile } from "../../apis/Apis";
 
 
 
@@ -53,38 +53,38 @@ export default function ProfileDetail({ currentUser, setCurrentUser }) {
           {isEditing.name ?
             <HStack gap='1rem'>
               <Input value={currentUser.name} onChange={e => onInputChange(e, 'name')} />
-              <IoCheckmarkOutline size='2rem' style={{ cursor: 'pointer' }} onClick={() => handleUpdate('name')} />
-              <IoClose size='2rem' style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('name', false)} />
+              <IoCheckmarkOutline size='2rem' className='pointer' onClick={() => handleUpdate('name')} />
+              <IoClose size='2rem' className='pointer' onClick={() => changeIsEditing('name', false)} />
             </HStack> :
             <HStack gap='1rem'>
               <Heading>{currentUser.name}</Heading>
-              <FaEdit style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('name', true)} />
+              <FaEdit className='pointer' onClick={() => changeIsEditing('name', true)} />
             </HStack>
           }
           {isEditing.bio ?
             <HStack gap='1rem'>
               <Text>Biography:</Text>
               <Input value={currentUser.bio} onChange={e => onInputChange(e, 'bio')} />
-              <IoCheckmarkOutline size='2rem' style={{ cursor: 'pointer' }} onClick={() => handleUpdate('bio')} />
-              <IoClose size='2rem' style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('bio', false)} />
+              <IoCheckmarkOutline size='2rem' className='pointer' onClick={() => handleUpdate('bio')} />
+              <IoClose size='2rem' className='pointer' onClick={() => changeIsEditing('bio', false)} />
             </HStack> :
             <HStack gap='1rem'>
               <Text>Biography:</Text>
               <Text>{currentUser.bio}</Text>
-              <FaEdit style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('bio', true)} />
+              <FaEdit className='pointer' onClick={() => changeIsEditing('bio', true)} />
             </HStack>
           }
           {isEditing.phone ?
             <HStack gap='1rem'>
               <Text>Phone:</Text>
               <Input value={currentUser.phone} onChange={e => onInputChange(e, 'phone')} />
-              <IoCheckmarkOutline size='2rem' style={{ cursor: 'pointer' }} onClick={() => handleUpdate('phone')} />
-              <IoClose size='2rem' style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('phone', false)} />
+              <IoCheckmarkOutline size='2rem' className='pointer' onClick={() => handleUpdate('phone')} />
+              <IoClose size='2rem' className='pointer' onClick={() => changeIsEditing('phone', false)} />
             </HStack> :
             <HStack gap='1rem'>
               <Text>Phone:</Text>
               <Text>{currentUser.phone}</Text>
-              <FaEdit style={{ cursor: 'pointer' }} onClick={() => changeIsEditing('phone', true)} />
+              <FaEdit className='pointer' onClick={() => changeIsEditing('phone', true)} />
             </HStack>
           }
           <HStack gap='1rem'>

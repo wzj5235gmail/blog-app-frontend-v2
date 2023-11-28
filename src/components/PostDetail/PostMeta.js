@@ -1,8 +1,8 @@
 import { Divider, Flex, HStack, Text, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FaRegComment, FaRegBookmark, FaRegThumbsUp, FaThumbsUp, FaShareSquare, FaRegEye, FaBookmark } from "react-icons/fa";
-import { likePostById, unlikePostById, updateUserListFields } from "../apis/Apis";
-import useToggle from "../hooks/useToggle";
+import { likePostById, unlikePostById, updateUserListFields } from "../../apis/Apis";
+import useToggle from "../../hooks/useToggle";
 
 export default function PostMeta({ post, setPost, btnRef, onOpen, commentsCount, postId }) {
 
@@ -55,7 +55,7 @@ export default function PostMeta({ post, setPost, btnRef, onOpen, commentsCount,
         <HStack gap='2rem'>
           <HStack>
             <Tooltip label={isLiked ? 'Unlike' : 'Like'}>
-              <span onClick={handleLike} style={{ cursor: 'pointer' }}>
+              <span onClick={handleLike} className='pointer'>
                 {isLiked ? <FaThumbsUp /> : <FaRegThumbsUp />}
               </span>
             </Tooltip>
@@ -63,7 +63,7 @@ export default function PostMeta({ post, setPost, btnRef, onOpen, commentsCount,
           </HStack>
           <HStack>
             <Tooltip label='Comments'>
-              <span style={{ cursor: 'pointer' }}>
+              <span className='pointer'>
                 <FaRegComment ref={btnRef} colorScheme='teal' onClick={onOpen} />
               </span>
             </Tooltip>
@@ -81,7 +81,7 @@ export default function PostMeta({ post, setPost, btnRef, onOpen, commentsCount,
         <HStack gap='2rem'>
           {currentUser && currentUser.savedPosts &&
             <Tooltip label={toggled ? 'Unsave' : 'Save'}>
-              <span onClick={handleToggle} style={{ cursor: 'pointer' }}>
+              <span onClick={handleToggle} className='pointer'>
                 {toggled ? <FaBookmark /> : <FaRegBookmark />}
               </span>
             </Tooltip>

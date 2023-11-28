@@ -87,7 +87,7 @@ export default function Login() {
             <Button onClick={handleClear}>Clear</Button>
           </Flex>
         </FormControl>
-        <Link textDecor='none' href='http://127.0.0.1:5000/auth/google'>
+        <Link textDecor='none' href='/auth/google'>
           <HStack>
             <Avatar src={google} boxSize='1rem' />
             <Text fontWeight={600}>Sign in with Google</Text>

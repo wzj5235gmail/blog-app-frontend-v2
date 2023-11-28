@@ -1,11 +1,11 @@
 import { Button, Checkbox, Divider, Flex, HStack, Heading, Radio, RadioGroup, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import PostCard from "../components/PostCard";
 import MyBreadCrumb from "../components/MyBreadCrumb";
 import Select from 'react-select'
 import { useParams } from "react-router-dom";
 import { getAllCategories, getAllPosts, getAllTags, getFilteredPosts } from "../apis/Apis";
 import ReactPaginate from 'react-paginate';
+import PostCard from "../components/Home/PostCard";
 
 
 export default function Blog() {

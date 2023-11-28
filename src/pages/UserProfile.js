@@ -1,11 +1,11 @@
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import UserPosts from "../components/UserPosts";
-import Follows from "../components/Follows";
-import Interests from "../components/Interests";
-import LikedPosts from "../components/LikedPosts";
-import Bookmarks from "../components/Bookmarks";
-import ProfileDetail from "../components/ProfileDetail";
+import UserPosts from "../components/Profile/UserPosts";
+import Follows from "../components/Profile/Follows";
+import Interests from "../components/Profile/Interests";
+import LikedPosts from "../components/Profile/LikedPosts";
+import Bookmarks from "../components/Profile/Bookmarks";
+import ProfileDetail from "../components/Profile/ProfileDetail";
 import isAuthenticated from "../isAuthenticated";
 import MyBreadCrumb from "../components/MyBreadCrumb";
 

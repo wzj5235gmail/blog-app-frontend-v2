@@ -1,5 +1,5 @@
 import { Avatar, Button, Center, Flex, Link, Text } from "@chakra-ui/react";
-import useToggle from "../hooks/useToggle";
+import useToggle from "../../hooks/useToggle";
 
 export default function AuthorToFollowCard({ _id, avatar, name, bio }) {
   const { toggled, handleToggle } = useToggle('follows', _id)

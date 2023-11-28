@@ -2,7 +2,7 @@ import { Button, Flex, Heading, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getFilteredPosts, getTagById } from "../apis/Apis";
 import { useParams } from "react-router-dom";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/Home/PostCard";
 import useInterest from "../hooks/useInterest";
 
 export default function Topic() {

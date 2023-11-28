@@ -1,6 +1,5 @@
 import { Avatar, Button, Flex, HStack, Heading, Image, Link, Text } from "@chakra-ui/react";
-import useFollow from "../hooks/useFollow";
-import useToggle from "../hooks/useToggle";
+import useToggle from "../../hooks/useToggle";
 
 export default function AuthorIntro({ _id, avatar, name, bio }) {
   // const { followed, handleFollow } = useFollow(_id)

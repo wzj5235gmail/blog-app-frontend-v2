@@ -1,6 +1,6 @@
 import { Avatar, Flex, HStack, Text, Tooltip } from "@chakra-ui/react";
 import CommentInput from "./CommentInput";
-import { deleteCommentById, getAllCommentsOfPost, likeCommentById, unlikeCommentById, updateUserListFields } from "../apis/Apis";
+import { deleteCommentById, getAllCommentsOfPost, likeCommentById, unlikeCommentById, updateUserListFields } from "../../apis/Apis";
 import { useEffect, useState } from "react";
 import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa";
 
@@ -74,7 +74,7 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
       <Flex justify='space-between'>
         <HStack>
           <Tooltip label={isLiked ? 'Unlike' : 'Like'}>
-            <span onClick={handleLike} style={{ cursor: 'pointer' }}>
+            <span onClick={handleLike} className='pointer'>
               {isLiked ? <FaThumbsUp /> : <FaRegThumbsUp />}
             </span>
           </Tooltip>
@@ -82,9 +82,9 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
         </HStack>
         <HStack>
           {currentUser && currentUser._id === commentContent.author._id &&
-            <Text style={{ cursor: 'pointer' }} onClick={handleDelete} color='red'>Delete</Text>
+            <Text className='pointer' onClick={handleDelete} color='red'>Delete</Text>
           }
-          <Text style={{ cursor: 'pointer' }} onClick={handleReplyClick}>Reply</Text>
+          <Text className='pointer' onClick={handleReplyClick}>Reply</Text>
         </HStack>
       </Flex>
       {isShow && (<CommentInput

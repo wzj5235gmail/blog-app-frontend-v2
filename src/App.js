@@ -13,18 +13,20 @@ import Signup from './pages/Signup';
 import { ChakraProvider } from '@chakra-ui/react';
 import PostDetail from './pages/PostDetail';
 import PostEdit from './pages/PostEdit';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Navbar from './components/Home/Navbar';
+import Footer from './components/Home/Footer';
 import Topic from './pages/Topic';
 import AuthorProfile from './pages/AuthorProfile';
 import UserProfile from './pages/UserProfile';
 import Oauth from './pages/Oauth';
+import theme from './customTheme';
+import { useEffect, useState } from 'react';
 
 
 function App() {
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Navbar />
       <Router>
         <Routes>

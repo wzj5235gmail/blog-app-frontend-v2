@@ -12,18 +12,31 @@ import {
   Text,
   Button,
   HStack,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
 } from "@chakra-ui/react";
 import MyBreadCrumb from "../components/MyBreadCrumb";
-import AuthorIntro from "../components/AuthorIntro";
-import PostMeta from "../components/PostMeta"
+import AuthorIntro from "../components/PostDetail/AuthorIntro";
+import PostMeta from "../components/PostDetail/PostMeta"
 import { useEffect, useRef, useState } from "react";
 import * as DOMPurify from 'dompurify';
 import { deletePostById, getAllCommentsOfPost, getPostById, updatePostById } from "../apis/Apis";
-import { useParams } from "react-router-dom";
-import CommentCard from "../components/CommentCard";
-import CommentInput from "../components/CommentInput";
+import { Link, useParams } from "react-router-dom";
+import CommentCard from "../components/PostDetail/CommentCard";
+import CommentInput from "../components/PostDetail/CommentInput";
 import isAuthenticated from "../isAuthenticated";
-import TopicTag from "../components/TopicTag";
+import TopicTag from "../components/PostDetail/TopicTag";
+import { BsThreeDots } from "react-icons/bs";
+
 
 export default function PostDetail() {
   const [comments, setComments] = useState([])
@@ -33,8 +46,10 @@ export default function PostDetail() {
   const { postId } = useParams()
   const [isAuthor, setIsAuthor] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
-
-
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure()
+  const cancelRef = useRef()
+  const [isMobile, setIsMobile] = useState(false)
 
   const breadcrumb = [
     {
@@ -72,34 +87,75 @@ export default function PostDetail() {
 
   useEffect(() => {
     setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+    setIsMobile(window.innerWidth < 768)
   }, [])
 
   useEffect(() => {
     setIsAuthor(currentUser && post && post.author && currentUser._id === post.author._id)
   }, [currentUser, post])
 
+  const handleDelete = async () => {
+    setDeleteLoading(true)
+    const res = await deletePostById(post._id)
+    onAlertClose()
+    if (res.success) {
+      window.location.pathname = '/'
+    } else {
+      console.log(res.message)
+    }
+  }
+
   return (
     <>
-      <MyBreadCrumb breadcrumb={breadcrumb} />
-      <Flex direction='column' maxW={['xs', 'sm', 'md', 'lg', 'xl', '2xl']} mx='auto' gap='3rem' mb='5rem'>
-        {isAuthor &&
-          <Flex justify='end' gap='1rem'>
-            <Button colorScheme="red" size='sm' onClick={async () => {
-              const res = await deletePostById(post._id)
-              window.location.pathname = '/'
-            }}>Delete</Button>
-            <Button colorScheme="blue" size='sm' onClick={() => window.location.pathname = `/edit/${post._id}`} >Update</Button>
-            {post.status === 'draft' && <Button colorScheme="green" size='sm' onClick={async () => {
-              const res = await updatePostById(post._id, { status: 'published' })
-              if (res.success) {
-                setPost(res.data)
-              }
-            }} >Publish</Button>}
-          </Flex>
-        }
-        <HStack gap='1rem'>
-          <Heading>{post.title}</Heading>
-          {post.status === 'draft' && <Tag minW='3rem'>Draft</Tag>}
+      {!isMobile && <MyBreadCrumb breadcrumb={breadcrumb} />}
+      <Flex
+        direction='column'
+        maxW={['xs', 'sm', 'md', 'lg', 'xl', '2xl']}
+        mx='auto'
+        gap='3rem'
+        my='5rem'
+      >
+
+        <HStack justify='space-between'>
+          <HStack gap='1rem'>
+            <Heading>{post.title}</Heading>
+            {post.status === 'draft' && <Tag minW='3rem'>Draft</Tag>}
+          </HStack>
+          <>
+            {isAuthor &&
+              <Popover
+              >
+                <PopoverTrigger>
+                  <span tabIndex={0}>
+                    <BsThreeDots
+                      className='pointer'
+                      size={20}
+                    />
+                  </span>
+                </PopoverTrigger>
+                <PopoverContent
+                  maxW={75}
+                  fontSize='sm'
+                  textAlign='center'
+                >
+                  <PopoverArrow />
+                  <PopoverBody>
+                    <Text
+                      color='red'
+                      className="pointer"
+                      onClick={onAlertOpen}
+                    >Delete</Text>
+                  </PopoverBody>
+                  <PopoverBody>
+                    <Link
+                      className="pointer"
+                      to={`/edit/${post._id}`}
+                    >Update</Link>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            }
+          </>
         </HStack>
         {post.author && <AuthorIntro {...post.author} />}
         <PostMeta post={post} btnRef={btnRef} onOpen={onOpen} setPost={setPost} commentsCount={comments.length} postId={postId} />
@@ -110,6 +166,7 @@ export default function PostDetail() {
           {post.tags && post.tags.map(tag => <TopicTag key={tag._id} {...tag} />)}
         </Flex>
       </Flex>
+
       <Drawer
         isOpen={isOpen}
         placement='right'
@@ -148,6 +205,39 @@ export default function PostDetail() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      <AlertDialog
+        isOpen={isAlertOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onAlertClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Delete Post
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onAlertClose}>
+                Cancel
+              </Button>
+              <Button
+                isLoading={deleteLoading}
+                colorScheme='red'
+                onClick={handleDelete}
+                ml={3}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
 
     </>
   )
