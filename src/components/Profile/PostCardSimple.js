@@ -1,50 +1,34 @@
-import React from 'react'
-import { Link, Heading, Text, Divider, HStack, Avatar, Box, Grid, GridItem } from '@chakra-ui/react'
+import React from "react"
+import { Link, Heading, Text, Avatar, Grid, GridItem } from "@chakra-ui/react"
 
 export default function PostCardSimple({ _id, author, title }) {
   return (
     <Grid
-      templateColumns='1fr 4fr'
-      alignItems='center'
-      mb='1rem'
+      templateColumns="1fr 2fr 9fr"
+      alignItems="center"
+      mb="1rem"
+      columnGap="1rem"
+      fontSize={["xs", null, null, "md"]}
     >
       <GridItem>
-        <HStack
-          gap='1rem'
-        >
-          <Avatar src={author.avatar} />
-          <Text fontWeight="medium" w={40}>{author.name}</Text>
-        </HStack>
+        <Link href={`/users/${author._id}`}>
+          <Avatar size="sm" src={author.avatar} />
+        </Link>
       </GridItem>
       <GridItem>
-        <Heading fontSize="xl" >
-          <Link href={`/posts/${_id}`}>
+        <Link href={`/users/${author._id}`}>
+          <Text fontWeight="medium" maxW={40}>{author.name}</Text>
+        </Link>
+      </GridItem>
+      <GridItem>
+        <Link href={`/posts/${_id}`}>
+          <Heading
+            fontSize={["sm", null, null, "lg"]}
+          >
             {title}
-          </Link>
-        </Heading>
+          </Heading>
+        </Link>
       </GridItem>
     </Grid>
-    // <HStack
-    //   my='1rem'
-    //   px='1rem'
-    //   wrap='wrap'
-    //   gap='1rem'
-    //   justify='left'
-    // >
-    //   <Link href={`/authors/${author._id}`}>
-    //     <HStack
-    //       gap='1rem'
-    //     >
-    //       <Avatar src={author.avatar} />
-    //       <Text fontWeight="medium" w={40}>{author.name}</Text>
-    //     </HStack>
-    //   </Link>
-    //   <Heading fontSize="xl" >
-    //     <Link href={`/posts/${_id}`}>
-    //       {title}
-    //     </Link>
-    //   </Heading>
-    //   <Divider />
-    // </HStack>
   )
 }

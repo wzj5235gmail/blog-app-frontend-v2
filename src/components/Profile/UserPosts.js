@@ -1,11 +1,11 @@
-import { Box, Text } from '@chakra-ui/react';
-import PostCardSimple from './PostCardSimple';
+import { Box, Text } from "@chakra-ui/react"
+import PostCardSimple from "./PostCardSimple"
 
 export default function UserPosts({ currentUser }) {
   const userPosts = currentUser.posts || []
 
   return (
-    <Box my='1rem'>
+    <Box my="1rem">
       {userPosts.length === 0 ? (
         <Text>No posts</Text>
       ) : (
@@ -16,5 +16,5 @@ export default function UserPosts({ currentUser }) {
         </Box>
       )}
     </Box>
-  );
-};
+  )
+}

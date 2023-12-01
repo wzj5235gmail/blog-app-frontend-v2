@@ -1,33 +1,33 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import UserPosts from "../components/Profile/UserPosts";
-import Follows from "../components/Profile/Follows";
-import Interests from "../components/Profile/Interests";
-import LikedPosts from "../components/Profile/LikedPosts";
-import Bookmarks from "../components/Profile/Bookmarks";
-import ProfileDetail from "../components/Profile/ProfileDetail";
-import isAuthenticated from "../isAuthenticated";
-import MyBreadCrumb from "../components/MyBreadCrumb";
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Box } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import UserPosts from "../components/Profile/UserPosts"
+import Follows from "../components/Profile/Follows"
+import Interests from "../components/Profile/Interests"
+import LikedPosts from "../components/Profile/LikedPosts"
+import Bookmarks from "../components/Profile/Bookmarks"
+import ProfileDetail from "../components/Profile/ProfileDetail"
+import isAuthenticated from "../isAuthenticated"
+import MyBreadCrumb from "../components/MyBreadCrumb"
 
 export default function UserProfile() {
   const [currentUser, setCurrentUser] = useState({})
 
   useEffect(() => {
-    if (!isAuthenticated()) { window.location.pathname = '/login' }
-    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+    if (!isAuthenticated()) { window.location.pathname = "/login" }
+    setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
   }, [])
 
   const breadcrumb = [
     {
       id: 1,
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       isCurrentPage: false,
     },
     {
       id: 2,
-      path: '/profile',
-      name: 'Profile',
+      path: "/profile",
+      name: "Profile",
       isCurrentPage: true,
     },
   ]
@@ -35,26 +35,30 @@ export default function UserProfile() {
   return (
     <>
       <MyBreadCrumb breadcrumb={breadcrumb} />
+      <Box
+        maxW="4xl"
+        mx="auto"
+        mt="5rem"
+      >
+        {currentUser &&
+          <ProfileDetail currentUser={currentUser} setCurrentUser={setCurrentUser} />}
+      </Box>
       <Tabs
-        maxW='4xl'
-        mx='auto'
-        mt='5rem'
-
+        maxW="2xl"
+        mx="auto"
+        mt="4rem"
+        isFitted
       >
         <TabList>
-          <Tab>Profile</Tab>
-          <Tab>My Posts</Tab>
-          <Tab>Follows</Tab>
-          <Tab>Interests</Tab>
-          <Tab>LikedPosts</Tab>
-          <Tab>Bookmarks</Tab>
+          <Tab fontSize="sm">Posts</Tab>
+          <Tab fontSize="sm">Follows</Tab>
+          <Tab fontSize="sm">Interests</Tab>
+          <Tab fontSize="sm">Likes</Tab>
+          <Tab fontSize="sm">Bookmarks</Tab>
         </TabList>
 
         {currentUser &&
           <TabPanels>
-            <TabPanel>
-              <ProfileDetail currentUser={currentUser} setCurrentUser={setCurrentUser} />
-            </TabPanel>
             <TabPanel>
               {currentUser.posts &&
                 <UserPosts currentUser={currentUser} />

@@ -1,12 +1,12 @@
-import { Box, Text } from '@chakra-ui/react';
-import React from 'react';
-import PostCardSimple from './PostCardSimple';
+import { Box, Text } from "@chakra-ui/react"
+import React from "react"
+import PostCardSimple from "./PostCardSimple"
 
 const LikedPosts = ({ currentUser }) => {
-  const likedPosts = currentUser.likes || [];
+  const likedPosts = currentUser.likes || []
 
   return (
-    <Box my='1rem'>
+    <Box my="1rem">
       {likedPosts.length === 0 ? (
         <Text>No liked posts available</Text>
       ) : (
@@ -15,7 +15,7 @@ const LikedPosts = ({ currentUser }) => {
         </Box>
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default LikedPosts;
+export default LikedPosts

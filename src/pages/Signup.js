@@ -1,17 +1,17 @@
-import { Alert, AlertIcon, Avatar, Button, Flex, FormControl, FormLabel, HStack, Heading, Input, Link, Spinner, Text, VStack } from "@chakra-ui/react";
-import MyBreadCrumb from "../components/MyBreadCrumb";
-import { registerUser } from "../apis/Apis";
-import { useState } from "react";
+import { Alert, AlertIcon, Avatar, Button, Flex, FormControl, FormLabel, HStack, Heading, Input, Link, Spinner, Text, VStack } from "@chakra-ui/react"
+import MyBreadCrumb from "../components/MyBreadCrumb"
+import { registerUser } from "../apis/Apis"
+import { useState } from "react"
 import google from "../static/google.png"
 
 
 export default function Signup() {
 
   const [form, setForm] = useState({
-    username: '',
-    password: '',
-    email: '',
-    name: '',
+    username: "",
+    password: "",
+    email: "",
+    name: "",
   })
 
   const [formInvalid, setFormInvalid] = useState({
@@ -21,16 +21,16 @@ export default function Signup() {
     name: false,
   })
 
-  const [fail, setFail] = useState({ fail: false, message: '' })
+  const [fail, setFail] = useState({ fail: false, message: "" })
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleClear = () => {
     setForm({
-      username: '',
-      password: '',
-      email: '',
-      name: '',
+      username: "",
+      password: "",
+      email: "",
+      name: "",
     })
     setFormInvalid({
       username: false,
@@ -40,7 +40,7 @@ export default function Signup() {
     })
     setFail({
       fail: false,
-      message: ''
+      message: ""
     })
   }
 
@@ -52,8 +52,8 @@ export default function Signup() {
       if (data.success) {
         setSuccess(true)
         setTimeout(() => {
-          window.location.pathname = '/login'
-        }, 2000);
+          window.location.pathname = "/login"
+        }, 2000)
       } else {
         setFail({ fail: true, message: data.message })
       }
@@ -61,16 +61,16 @@ export default function Signup() {
   }
 
   const isStrongPassword = (password) => {
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasDigit = /\d/.test(password);
-    const hasRequiredLength = password.length >= 8;
-    return hasUpperCase && hasLowerCase && hasDigit && hasRequiredLength;
+    const hasUpperCase = /[A-Z]/.test(password)
+    const hasLowerCase = /[a-z]/.test(password)
+    const hasDigit = /\d/.test(password)
+    const hasRequiredLength = password.length >= 8
+    return hasUpperCase && hasLowerCase && hasDigit && hasRequiredLength
   }
 
   const isEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
   }
 
   const validateForm = () => {
@@ -97,14 +97,14 @@ export default function Signup() {
   const breadcrumb = [
     {
       id: 1,
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       isCurrentPage: false,
     },
     {
       id: 2,
-      path: '/signup',
-      name: 'Signup',
+      path: "/signup",
+      name: "Signup",
       isCurrentPage: true,
     },
   ]
@@ -113,48 +113,48 @@ export default function Signup() {
     <>
       <MyBreadCrumb breadcrumb={breadcrumb} />
       {success && (
-        <Alert status='success' mx='auto' my='2rem' maxW='md'>
+        <Alert status="success" mx="auto" my="2rem" maxW="md">
           <AlertIcon />
           Successful! Redirecting to login...
         </Alert>)}
-      <VStack direction='column' maxW={['xs']} mx='auto' px='1rem' mb='5rem'>
+      <VStack direction="column" maxW={["xs"]} mx="auto" px="1rem" mb="5rem">
 
-        <Heading mb='3rem'>Join us now.</Heading>
+        <Heading mb="3rem">Join us now.</Heading>
         <FormControl>
-          <Flex direction='column' gap='1rem'>
+          <Flex direction="column" gap="1rem">
             <FormLabel>Username</FormLabel>
-            <Input type='text' value={form.username} onChange={e => {
+            <Input type="text" value={form.username} onChange={e => {
               setForm(prev => { return { ...prev, username: e.target.value } })
               setFormInvalid(prev => { return { ...prev, username: false } })
             }} />
-            {formInvalid.username && <Text color='red'>Username invalid.</Text>}
+            {formInvalid.username && <Text color="red">Username invalid.</Text>}
             <FormLabel>Email</FormLabel>
-            <Input type='email' value={form.email} onChange={e => {
+            <Input type="email" value={form.email} onChange={e => {
               setForm(prev => { return { ...prev, email: e.target.value } })
               setFormInvalid(prev => { return { ...prev, email: false } })
             }} />
-            {formInvalid.email && <Text color='red'>Email invalid.</Text>}
+            {formInvalid.email && <Text color="red">Email invalid.</Text>}
             <FormLabel>Password</FormLabel>
-            <Input type='password' value={form.password} onChange={e => {
+            <Input type="password" value={form.password} onChange={e => {
               setForm(prev => { return { ...prev, password: e.target.value } })
               setFormInvalid(prev => { return { ...prev, password: false } })
             }} />
-            {formInvalid.password && <Text color='red'>Password invalid.</Text>}
+            {formInvalid.password && <Text color="red">Password invalid.</Text>}
             <FormLabel>Name</FormLabel>
-            <Input type='text' value={form.name} onChange={e => {
+            <Input type="text" value={form.name} onChange={e => {
               setForm(prev => { return { ...prev, name: e.target.value } })
               setFormInvalid(prev => { return { ...prev, name: false } })
             }} />
-            {formInvalid.name && <Text color='red'>Name invalid.</Text>}
-            <Button mt='2rem' colorScheme="orange" onClick={handleSubmit}>{loading ? <Spinner /> : 'Sign up'}</Button>
-            {fail.fail && <Text color='red'>{fail.message}</Text>}
+            {formInvalid.name && <Text color="red">Name invalid.</Text>}
+            <Button mt="2rem" colorScheme="orange" onClick={handleSubmit}>{loading ? <Spinner /> : "Sign up"}</Button>
+            {fail.fail && <Text color="red">{fail.message}</Text>}
 
             <Button onClick={handleClear}>Clear</Button>
           </Flex>
         </FormControl>
-        <Link textDecor='none' href='http://127.0.0.1:5000/auth/google'>
+        <Link textDecor="none" href="http://127.0.0.1:5000/auth/google">
           <HStack>
-            <Avatar src={google} boxSize='1rem' />
+            <Avatar src={google} boxSize="1rem" />
             <Text fontWeight={600}>Sign in with Google</Text>
           </HStack>
         </Link>

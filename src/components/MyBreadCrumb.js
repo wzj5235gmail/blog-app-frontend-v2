@@ -1,9 +1,9 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react"
 
-export default function MyBreadCrumb({breadcrumb}) {
+export default function MyBreadCrumb({ breadcrumb }) {
 
   return (
-    <Breadcrumb spacing='.5rem' mx={[6, null, 100, null, 300]} my='3rem' fontWeight={400}>
+    <Breadcrumb spacing=".5rem" mx="15vw" my={["2rem", null, null, "3rem"]} fontWeight={400}>
       {breadcrumb && breadcrumb.map(i => {
         return (
           <BreadcrumbItem key={i.id} isCurrentPage={i.isCurrentPage}>

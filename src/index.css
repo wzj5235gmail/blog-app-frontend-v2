@@ -1,5 +1,5 @@
 .post-content {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 32px;
 }
 
@@ -27,7 +27,48 @@
   font-size: .9em;
 }
 
-@media (max-width: 850px) {
+.post-content ul {
+  padding-left: 3rem;
+}
+
+.post-content h1 {
+  font-size: 3rem;
+  line-height: 4rem;
+  margin: 2rem 0;
+  font-weight: 700;
+}
+
+.post-content h2 {
+  font-size: 2rem;
+  line-height: 3rem;
+  margin: 2rem 0;
+  font-weight: 700;
+}
+
+.post-content h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin: 2rem 0;
+  font-weight: 700;
+}
+
+.post-content h4 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  margin: 2rem 0;
+  font-weight: 700;
+}
+
+.post-content h5 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 2rem 0;
+  font-weight: 700;
+}
+
+
+@media (max-width: 1300px) {
+
   .post-card-image,
   .post-card-extract,
   .post-card-tags {
@@ -44,16 +85,17 @@
 }
 
 .page-item {
-  margin: 0 .5rem;
+  margin: 0 .25rem;
   display: inline-block;
 }
 
 .page-item a {
-  padding: 10px;
   text-decoration: none;
   color: #333;
   background-color: #fff;
   border: 1px solid #ddd;
+  padding: 0.5rem 0.5rem;
+  border-radius: 10px;
 }
 
 .page-item.break a {
@@ -64,12 +106,6 @@
   background-color: #007bff;
   color: #fff;
   border: 1px solid #007bff;
-}
-
-.page-item.previous a,
-.page-item.next a {
-  background-color: #eee;
-  color: #333;
 }
 
 .page-item.previous a:hover,
@@ -111,4 +147,28 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+.upload-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.upload-label {
+  padding: 0.2rem 0.5rem;
+  border-radius: .5rem;
+  font-weight: 600;
+  border: 1.5px solid rgb(209, 87, 87);
+  margin-bottom: 1rem;
+  color: rgb(209, 87, 87);
+  transition-duration: .2s;
+}
+
+.upload-label:hover {
+  color: white;
+  background-color: rgb(209, 87, 87);
 }

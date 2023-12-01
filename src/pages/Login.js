@@ -1,20 +1,20 @@
-import { Alert, AlertIcon, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Heading, Image, Input, Link, Spinner, Text, VStack } from "@chakra-ui/react";
-import MyBreadCrumb from "../components/MyBreadCrumb";
-import { useState } from "react";
-import { loginUser } from "../apis/Apis";
+import { Alert, AlertIcon, Avatar, Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Heading, Image, Input, Link, Spinner, Text, VStack } from "@chakra-ui/react"
+import MyBreadCrumb from "../components/MyBreadCrumb"
+import { useState } from "react"
+import { loginUser } from "../apis/Apis"
 import google from "../static/google.png"
 
 
 export default function Login() {
 
   const [form, setForm] = useState({
-    usernameOrEmail: '',
-    password: ''
+    usernameOrEmail: "",
+    password: ""
   })
 
   const [fail, setFail] = useState({
     fail: false,
-    message: ''
+    message: ""
   })
 
   const [success, setSuccess] = useState(false)
@@ -26,10 +26,10 @@ export default function Login() {
     setLoading(false)
     if (data.success) {
       setSuccess(true)
-      localStorage.setItem('currentUser', JSON.stringify(data.data))
+      localStorage.setItem("currentUser", JSON.stringify(data.data))
       setTimeout(() => {
-        window.location.pathname = '/'
-      }, 1000);
+        window.location.pathname = "/"
+      }, 1000)
     } else {
       setFail({
         fail: true,
@@ -40,26 +40,26 @@ export default function Login() {
 
   const handleClear = () => {
     setForm({
-      usernameOrEmail: '',
-      password: ''
+      usernameOrEmail: "",
+      password: ""
     })
     setFail({
       fail: false,
-      message: ''
+      message: ""
     })
   }
 
   const breadcrumb = [
     {
       id: 1,
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       isCurrentPage: false,
     },
     {
       id: 2,
-      path: '/login',
-      name: 'Login',
+      path: "/login",
+      name: "Login",
       isCurrentPage: true,
     },
   ]
@@ -68,28 +68,28 @@ export default function Login() {
     <>
       <MyBreadCrumb breadcrumb={breadcrumb} />
       {success && (
-        <Alert status='success' mx='auto' my='2rem' maxW='md'>
+        <Alert status="success" mx="auto" my="2rem" maxW="md">
           <AlertIcon />
           Login successful! Redirecting to home page...
         </Alert>)}
-      <VStack direction='column' maxW={['xs']} mx='auto' px='1rem' mb='5rem'>
-        <Heading mb='3rem'>Welcome back.</Heading>
+      <VStack direction="column" maxW={["xs"]} mx="auto" px="1rem" mb="5rem">
+        <Heading mb="3rem">Welcome back.</Heading>
         <FormControl isRequired>
-          <Flex direction='column' gap='1rem'>
+          <Flex direction="column" gap="1rem">
             <FormLabel>Username or Email</FormLabel>
-            <Input value={form.usernameOrEmail} type='text' onChange={e => { setForm(prev => { return { ...prev, usernameOrEmail: e.target.value } }) }} />
+            <Input value={form.usernameOrEmail} type="text" onChange={e => { setForm(prev => { return { ...prev, usernameOrEmail: e.target.value } }) }} />
             <FormErrorMessage>Username or email is required.</FormErrorMessage>
             <FormLabel>Password</FormLabel>
-            <Input value={form.password} type='password' onChange={e => { setForm(prev => { return { ...prev, password: e.target.value } }) }} />
+            <Input value={form.password} type="password" onChange={e => { setForm(prev => { return { ...prev, password: e.target.value } }) }} />
             <FormErrorMessage>Password is required.</FormErrorMessage>
-            <Button onClick={handleLogin} colorScheme="orange">{loading ? <Spinner /> : 'Login'}</Button>
-            {fail.fail && <Text mb='1rem' color='red'>{fail.message}</Text>}
+            <Button onClick={handleLogin} colorScheme="orange">{loading ? <Spinner /> : "Login"}</Button>
+            {fail.fail && <Text mb="1rem" color="red">{fail.message}</Text>}
             <Button onClick={handleClear}>Clear</Button>
           </Flex>
         </FormControl>
-        <Link textDecor='none' href='/auth/google'>
+        <Link textDecor="none" href="/auth/google">
           <HStack>
-            <Avatar src={google} boxSize='1rem' />
+            <Avatar src={google} boxSize="1rem" />
             <Text fontWeight={600}>Sign in with Google</Text>
           </HStack>
         </Link>
