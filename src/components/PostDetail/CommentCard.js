@@ -1,8 +1,8 @@
-import { Avatar, Flex, HStack, Text, Tooltip } from "@chakra-ui/react";
-import CommentInput from "./CommentInput";
-import { deleteCommentById, getAllCommentsOfPost, likeCommentById, unlikeCommentById, updateUserListFields } from "../../apis/Apis";
-import { useEffect, useState } from "react";
-import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa";
+import { Avatar, Flex, HStack, Text, Tooltip } from "@chakra-ui/react"
+import CommentInput from "./CommentInput"
+import { deleteCommentById, getAllCommentsOfPost, likeCommentById, unlikeCommentById, updateUserListFields } from "../../apis/Apis"
+import { useEffect, useState } from "react"
+import { FaRegThumbsUp, FaThumbsUp } from "react-icons/fa"
 
 
 export default function CommentCard({ postId, comment, comments, setComments, currentUser, setCurrentUser, notShowCancel }) {
@@ -19,7 +19,7 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
     if (currentUser) {
       setIsShow(!isShow)
     } else {
-      window.location.pathname = '/login'
+      window.location.pathname = "/login"
     }
   }
 
@@ -42,17 +42,17 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
       let userData
       let commentData
       if (isLiked) {
-        userData = await updateUserListFields('likedComments', 'remove', [commentContent._id])
+        userData = await updateUserListFields("likedComments", "remove", [commentContent._id])
         commentData = await unlikeCommentById(commentContent._id)
       } else {
-        userData = await updateUserListFields('likedComments', 'add', [commentContent._id])
+        userData = await updateUserListFields("likedComments", "add", [commentContent._id])
         commentData = await likeCommentById(commentContent._id)
       }
-      localStorage.setItem('currentUser', JSON.stringify({ ...currentUser, likedComments: userData.data.likedComments }))
-      setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+      localStorage.setItem("currentUser", JSON.stringify({ ...currentUser, likedComments: userData.data.likedComments }))
+      setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
       setCommentContent(prev => { return { ...prev, likes: commentData.data.likes } })
     } else {
-      window.location.pathname = '/login'
+      window.location.pathname = "/login"
     }
   }
 
@@ -62,19 +62,19 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
 
 
   return (
-    <Flex direction='column' ps='1rem' py='2rem' gap='1rem' fontSize='sm'>
-      <HStack justify='space-between'>
+    <Flex direction="column" ps="1rem" py="2rem" gap="1rem" fontSize="sm">
+      <HStack justify="space-between">
         <HStack>
-          <Avatar size='sm' src={commentContent.author.avatar} />
+          <Avatar size="sm" src={commentContent.author.avatar} />
           <Text fontWeight={600}>{commentContent.author.name}</Text>
         </HStack>
         <Text>{createDate}</Text>
       </HStack>
       <Text>{commentContent.content}</Text>
-      <Flex justify='space-between'>
+      <Flex justify="space-between">
         <HStack>
-          <Tooltip label={isLiked ? 'Unlike' : 'Like'}>
-            <span onClick={handleLike} className='pointer'>
+          <Tooltip label={isLiked ? "Unlike" : "Like"}>
+            <span onClick={handleLike} className="pointer">
               {isLiked ? <FaThumbsUp /> : <FaRegThumbsUp />}
             </span>
           </Tooltip>
@@ -82,9 +82,9 @@ export default function CommentCard({ postId, comment, comments, setComments, cu
         </HStack>
         <HStack>
           {currentUser && currentUser._id === commentContent.author._id &&
-            <Text className='pointer' onClick={handleDelete} color='red'>Delete</Text>
+            <Text className="pointer" onClick={handleDelete} color="red">Delete</Text>
           }
-          <Text className='pointer' onClick={handleReplyClick}>Reply</Text>
+          <Text className="pointer" onClick={handleReplyClick}>Reply</Text>
         </HStack>
       </Flex>
       {isShow && (<CommentInput

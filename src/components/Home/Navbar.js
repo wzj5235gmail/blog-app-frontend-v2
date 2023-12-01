@@ -24,11 +24,14 @@ import logo from "../../static/logo-no-background.png"
 import logoNoWord from "../../static/logo-no-background-no-word.png"
 import { useEffect, useRef, useState } from "react"
 import { getFilteredPosts } from "../../apis/Apis"
-import { FaRegEdit } from "react-icons/fa";
-import { FaRegUser } from "react-icons/fa6";
-import { CiSearch } from "react-icons/ci";
-import { IoExitOutline } from "react-icons/io5";
-import { MdExplore } from "react-icons/md";
+import { FaRegEdit } from "react-icons/fa"
+import { FaRegUser } from "react-icons/fa6"
+import { CiSearch } from "react-icons/ci"
+import { IoExitOutline } from "react-icons/io5"
+import { MdExplore } from "react-icons/md"
+import { FaUser } from "react-icons/fa"
+import { MdOutlineArticle } from "react-icons/md"
+
 
 
 export default function Navbar() {
@@ -36,23 +39,24 @@ export default function Navbar() {
   const searchInitialFocusRef = useRef()
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [suggestions, setSuggestions] = useState([])
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
   const [isMobile, setIsMobile] = useState(false)
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
 
   const handleLogout = (e) => {
     e.preventDefault()
-    localStorage.removeItem('currentUser')
+    localStorage.removeItem("currentUser")
     window.location.reload()
   }
 
-  const handleSearch = () => window.location.pathname = '/blog/search/' + search
+  const handleSearch = () => window.location.pathname = "/blog/search/" + search
 
   const handleSearchInputChange = async (e) => {
-    setSearch(e.target.value)
-    if (e.target.value.length > 0) {
-      const res = await getFilteredPosts('status=pubished&search=' + e.target.value)
+    const searchValue = e.target.value.trim()
+    setSearch(searchValue)
+    if (searchValue.length > 0) {
+      const res = await getFilteredPosts("status=pubished&search=" + searchValue)
       if (res.success) {
         setShowSuggestions(true)
         setSuggestions(res.data.data)
@@ -67,21 +71,21 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768)
+    setIsMobile(window.innerWidth < 1024)
   }, [])
 
   return (
     <>
       <Flex
-        align='center'
-        gap='1rem'
-        mx='2rem'
-        py='1rem'
-        justify='space-between'
+        align="center"
+        gap="1rem"
+        mx="2rem"
+        py="1rem"
+        justify="space-between"
       >
         <HStack
           className="search-bar"
-          gap='2rem'
+          gap="2rem"
         >
           <Link href="/">
             {isMobile
@@ -110,16 +114,16 @@ export default function Navbar() {
             <PopoverTrigger>
               <InputGroup>
                 <InputLeftElement>
-                  <CiSearch size={25} color='gray.500' />
+                  <CiSearch size={25} color="gray.500" />
                 </InputLeftElement>
                 <Input
-                  placeholder='Search'
+                  placeholder="Search"
                   onChange={handleSearchInputChange}
                   onBlur={() => setShowSuggestions(false)}
-                  onKeyUp={e => e.key === 'Enter' && handleSearch()}
+                  onKeyUp={e => e.key === "Enter" && handleSearch()}
                   ref={searchInitialFocusRef}
-                  borderRadius='full'
-                  bgColor='gray.100'
+                  borderRadius="full"
+                  bgColor="gray.100"
                 />
               </InputGroup>
             </PopoverTrigger>
@@ -129,7 +133,18 @@ export default function Navbar() {
                 <PopoverHeader fontWeight={600}>Posts</PopoverHeader>
                 {suggestions.map(suggestion => (
                   <Link href={`/posts/${suggestion._id}`}>
-                    <PopoverBody>{suggestion.title}</PopoverBody>
+                    <PopoverBody>
+                      <HStack>
+                        <Avatar
+                          src={suggestion.author.avatar}
+                          size="sm"
+                        />
+                        <Text noOfLines={1}>
+                          {suggestion.title}
+                        </Text>
+                      </HStack>
+                    </PopoverBody>
+                    <Divider />
                   </Link>
                 ))}
               </PopoverContent>
@@ -137,22 +152,21 @@ export default function Navbar() {
           </Popover>
         </HStack>
 
-        <HStack gap={['1em', null, '2em']}>
+        <HStack gap={["1em", null, null, "2em"]}>
           <Link href="/blog">
             <HStack>
               <MdExplore size={30} />
               {!isMobile && <span>Explore</span>}
             </HStack>
           </Link>
-          {currentUser
-            ?
-            <HStack gap={['1em', null, '2em']}>
+          {currentUser &&
+            <HStack gap={["1em", null, null, "2em"]}>
               <Link href="/edit">
                 {isMobile ?
                   <FaRegEdit size={30} /> :
                   <Button
-                    gap='0.5em'
-                    variant={['link', null, 'solid']}
+                    gap="0.5em"
+                    variant={["link", null, null, "solid"]}
                     colorScheme="yellow"
                   >
                     <FaRegEdit />
@@ -161,20 +175,20 @@ export default function Navbar() {
                 }
               </Link>
               <Popover
-                size='sm'
+                size="sm"
               >
                 <PopoverTrigger>
                   <div tabIndex={0}>
                     <Avatar
-                      className='pointer'
+                      className="pointer"
                       src={currentUser.avatar}
-                      size={['sm', null, 'md']}
+                      size={["sm", null, null, "md"]}
                     />
                   </div>
                 </PopoverTrigger>
                 <PopoverContent
-                  p='0.5em'
-                  fontSize='sm'
+                  p="0.5em"
+                  fontSize="sm"
                   maxW={150}
                 >
                   <Link href="/profile">
@@ -195,15 +209,54 @@ export default function Navbar() {
                 </PopoverContent>
               </Popover>
             </HStack>
+          }
+          {!currentUser && (isMobile
+            ?
+            <Popover
+              size="sm"
+            >
+              <PopoverTrigger>
+                <div tabIndex={0}>
+                  <FaUser
+                    className="pointer"
+                    size={25}
+                  />
+                </div>
+              </PopoverTrigger>
+              <PopoverArrow />
+              <PopoverContent
+                p="0.5em"
+                fontSize="sm"
+                maxW={130}
+              >
+                <Link href="/login">
+                  <PopoverBody>
+                    <HStack>
+                      <FaRegUser />
+                      <span>Login</span>
+                    </HStack>
+                  </PopoverBody>
+                </Link>
+                <Divider />
+                <Link href="/signup">
+                  <PopoverBody>
+                    <HStack>
+                      <FaRegEdit />
+                      <span>Signup</span>
+                    </HStack>
+                  </PopoverBody>
+                </Link>
+              </PopoverContent>
+            </Popover>
             :
-            <HStack gap='2rem'>
+            <HStack gap="2rem">
               <Link href="/login">
                 <span>Login</span>
               </Link>
               <Link href="/signup">
                 <span>Signup</span>
               </Link>
-            </HStack>
+            </HStack>)
           }
         </HStack>
 

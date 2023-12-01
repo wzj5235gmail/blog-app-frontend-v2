@@ -8,12 +8,12 @@ export default function useInterest(tagId) {
   const handleFollow = async () => {
     if (currentUser) {
       const userData = followed ?
-        await updateUserListFields('interests', 'remove', [tagId]) :
-        await updateUserListFields('interests', 'add', [tagId])
-      localStorage.setItem('currentUser', JSON.stringify({ ...currentUser, interests: userData.data.interests }))
-      setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+        await updateUserListFields("interests", "remove", [tagId]) :
+        await updateUserListFields("interests", "add", [tagId])
+      localStorage.setItem("currentUser", JSON.stringify({ ...currentUser, interests: userData.data.interests }))
+      setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
     } else {
-      window.location.pathname = '/login'
+      window.location.pathname = "/login"
     }
   }
 
@@ -22,8 +22,8 @@ export default function useInterest(tagId) {
   }, [currentUser])
 
   useEffect(() => {
-    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+    setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
   }, [])
 
-  return {followed, handleFollow}
+  return { followed, handleFollow }
 }

@@ -8,12 +8,12 @@ export default function useFollow(userId) {
   const handleFollow = async () => {
     if (currentUser) {
       const userData = followed ?
-        await updateUserListFields('follows', 'remove', [userId]) :
-        await updateUserListFields('follows', 'add', [userId])
-      localStorage.setItem('currentUser', JSON.stringify({ ...currentUser, follows: userData.data.follows }))
-      setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+        await updateUserListFields("follows", "remove", [userId]) :
+        await updateUserListFields("follows", "add", [userId])
+      localStorage.setItem("currentUser", JSON.stringify({ ...currentUser, follows: userData.data.follows }))
+      setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
     } else {
-      window.location.pathname = '/login'
+      window.location.pathname = "/login"
     }
   }
 
@@ -22,8 +22,8 @@ export default function useFollow(userId) {
   }, [currentUser])
 
   useEffect(() => {
-    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+    setCurrentUser(JSON.parse(localStorage.getItem("currentUser")))
   }, [])
 
-  return {followed, handleFollow}
+  return { followed, handleFollow }
 }
